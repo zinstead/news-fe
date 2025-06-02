@@ -115,6 +115,7 @@ const RightList = () => {
         columns={columns}
         dataSource={rightList}
         pagination={{ pageSize: 5 }}
+        rowKey={'id'}
       />
     </div>
   );

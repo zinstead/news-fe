@@ -95,7 +95,7 @@ const RoleList = () => {
 
   return (
     <div>
-      <Table dataSource={roleList} columns={columns} />
+      <Table dataSource={roleList} columns={columns} rowKey={'id'} />
       <Modal
         title="权限分配"
         open={modalVisible}

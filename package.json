@@ -4,7 +4,7 @@
   "main": "./src/index.tsx",
   "scripts": {
     "start": "yarn run dev",
-    "db":  "json-server --watch ./db.json",
+    "db": "json-server --watch ./db.json",
     "dev": "cross-env NODE_ENV=development webpack serve --config ./config/webpack.dev.js",
     "build": "cross-env NODE_ENV=production webpack --config ./config/webpack.prod.js",
     "postinstall": "husky"
