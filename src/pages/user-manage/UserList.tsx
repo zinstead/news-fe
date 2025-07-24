@@ -1,64 +1,54 @@
 import { apiPrefix } from '@/api';
+import UserForm from '@/components/UserForm';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { Button, Form, Input, Modal, Select, Space, Switch, Table, TableProps } from 'antd';
-import { BaseOptionType, DefaultOptionType } from 'antd/es/select';
+import {
+  Button,
+  Modal,
+  Popconfirm,
+  Space,
+  Switch,
+  Table,
+  TableProps,
+} from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import axios from 'axios';
 import { useState } from 'react';
-
-const roleMap: Record<number, string> = {
-  1: '超级管理员',
-  2: '区域管理员',
-  3: '区域编辑'
-}
 
 interface DataType {
   id: number;
   username: string;
   region: string;
-  role: { id: number, roleName: string, roleType: number, rights: string[] };
+  role: { id: number; roleName: string; roleType: number; rights: string[] };
   roleState: boolean;
   default: boolean;
 }
 
 const UserList = () => {
   const [visible, setVisible] = useState(false);
+  const [form] = useForm();
 
-  const { data: userList } = useRequest(async () => {
+  const { data: userList, refresh: refreshUserList } = useRequest(async () => {
     const res = await axios.get(`${apiPrefix}/users?_expand=role`);
     return res.data;
   });
 
-  const regionOptions: DefaultOptionType[] = [
-    {
-      label: '亚洲',
-      value: '亚洲'
-    },
-    {
-      value: '欧洲',
-      label: '欧洲'
-    },
-    {
-      label: '北美洲',
-      value: '北美洲'
-    },
-    {
-      label: '南美洲',
-      value: '南美洲'
-    },
-    {
-      label: '非洲',
-      value: '非洲'
-    },
-    {
-      label: '大洋洲',
-      value: '大洋洲'
-    },
-    {
-      label: '南极洲',
-      value: '南极洲'
-    },
-  ]
+  const { data: regionList = [] } = useRequest(async () => {
+    const res = await axios.get(`${apiPrefix}/regions`);
+    return res.data;
+  });
+
+  const { data: roleList = [] } = useRequest(async () => {
+    const res = await axios.get(`${apiPrefix}/roles`);
+    return res.data;
+  });
+  const roleOptions = roleList.map(
+    (item: { id: string; roleName: string }) => ({
+      id: item.id,
+      value: item.id,
+      label: item.roleName,
+    }),
+  );
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -91,12 +81,20 @@ const UserList = () => {
       render(value, record, index) {
         return (
           <Space>
-            <Button
-              danger
-              shape="circle"
-              icon={<DeleteOutlined />}
-              disabled={record.default}
-            ></Button>
+            <Popconfirm
+              title="删除用户"
+              description="你确定要删除该用户吗？"
+              onConfirm={() => {
+                onDeleteUser(record.id);
+              }}
+            >
+              <Button
+                danger
+                shape="circle"
+                icon={<DeleteOutlined />}
+                disabled={record.default}
+              ></Button>
+            </Popconfirm>
             <Button
               type="primary"
               icon={<EditOutlined />}
@@ -109,26 +107,60 @@ const UserList = () => {
     },
   ];
 
+  const onAddUser = () => {
+    form.validateFields().then(async () => {
+      const data = form.getFieldsValue();
+      const res = await axios.post(`${apiPrefix}/users`, {
+        ...data,
+        roleState: true,
+        default: false,
+      });
+      if (res) {
+        setVisible(false);
+        refreshUserList();
+        form.resetFields();
+      }
+    });
+  };
+
+  const onDeleteUser = async (id: number) => {
+    const res = await axios.delete(`${apiPrefix}/users/${id}`);
+    if (res) {
+      refreshUserList();
+    }
+  };
+
   return (
     <div>
-      <Button style={{ marginBottom: 20 }} type='primary' onClick={() => { setVisible(true) }}>添加用户</Button>
-      <Table columns={columns} dataSource={userList} pagination={{ pageSize: 5 }} rowKey={'id'} />
+      <Button
+        style={{ marginBottom: 20 }}
+        type="primary"
+        onClick={() => {
+          setVisible(true);
+        }}
+      >
+        添加用户
+      </Button>
+      <Table
+        columns={columns}
+        dataSource={userList}
+        pagination={{ pageSize: 5 }}
+        rowKey={'id'}
+      />
 
-      <Modal title='添加用户' open={visible} onCancel={() => { setVisible(false) }}>
-        <Form layout='vertical'>
-          <Form.Item label='用户名' name='username'>
-            <Input />
-          </Form.Item>
-          <Form.Item label='密码' name='password'>
-            <Input />
-          </Form.Item>
-          <Form.Item label='区域' name='region'>
-            <Select options={regionOptions}></Select>
-          </Form.Item>
-          <Form.Item label='角色' name='roleId'>
-            <Select options={[{ label: '超级管理员', value: 1 }, { label: '区域管理员', value: 2 }, { label: '区域编辑', value: 3 }]}></Select>
-          </Form.Item>
-        </Form>
+      <Modal
+        title="添加用户"
+        open={visible}
+        onCancel={() => {
+          setVisible(false);
+        }}
+        onOk={onAddUser}
+      >
+        <UserForm
+          form={form}
+          regionOptions={regionList}
+          roleOptions={roleOptions}
+        />
       </Modal>
     </div>
   );
