@@ -30,14 +30,21 @@ const NewsSandbox = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
+  const userToken = localStorage.getItem('token') ?? `{}`;
+  const { username, role } = JSON.parse(userToken);
+
   const items: MenuProps['items'] = [
     {
-      key: 'admin',
-      label: '超级管理员',
+      key: 'role',
+      label: role?.roleName,
     },
     {
       key: 'logout',
       label: '退出',
+      onClick: () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+      },
     },
   ];
 
@@ -68,7 +75,7 @@ const NewsSandbox = () => {
             <Menu
               theme="dark"
               mode="inline"
-              items={getPageMenuList(menuList)}
+              items={getPageMenuList(menuList, role.rights)}
               selectedKeys={selectedKeys}
               defaultOpenKeys={openKeys}
               onClick={info => {
@@ -93,7 +100,7 @@ const NewsSandbox = () => {
             />
             <div style={{ padding: '0 24px' }}>
               <Space>
-                <span>欢迎回来，admin</span>
+                <span>欢迎回来，{username}</span>
                 <Dropdown menu={{ items }}>
                   <Avatar size={32} icon={<UserOutlined />} />
                 </Dropdown>

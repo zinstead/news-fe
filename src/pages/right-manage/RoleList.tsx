@@ -12,7 +12,7 @@ import {
   Tree,
 } from 'antd';
 import axios from 'axios';
-import { useState } from 'react';
+import { Key, useState } from 'react';
 
 interface DataType {
   id: number;
@@ -108,7 +108,8 @@ const RoleList = () => {
           checkStrictly
           checkedKeys={checkedRightKeys}
           onCheck={checkedKeys => {
-            setCheckedRightKeys(checkedKeys as React.Key[]);
+            const keys = checkedKeys as { checked: Key[]; halfChecked: Key[] };
+            setCheckedRightKeys(keys.checked);
           }}
         />
       </Modal>

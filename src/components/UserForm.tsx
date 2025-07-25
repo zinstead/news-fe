@@ -1,6 +1,5 @@
 import { RoleType } from '@/constant';
 import { Form, FormInstance, Input, Select } from 'antd';
-import { useState } from 'react';
 
 const UserForm = (props: {
   regionOptions: { label: string; value: string }[];
@@ -8,7 +7,9 @@ const UserForm = (props: {
   form: FormInstance;
 }) => {
   const { regionOptions, roleOptions, form } = props;
-  const [disabled, setDisabled] = useState(false);
+  const roleId = Form.useWatch('roleId', form);
+  const disabled = roleId === RoleType['超级管理员'];
+
   return (
     <div>
       <Form layout="vertical" form={form}>
@@ -30,10 +31,7 @@ const UserForm = (props: {
             options={roleOptions}
             onChange={value => {
               if (value === RoleType['超级管理员']) {
-                setDisabled(true);
                 form.setFieldValue('region', '');
-              } else {
-                setDisabled(false);
               }
             }}
           ></Select>

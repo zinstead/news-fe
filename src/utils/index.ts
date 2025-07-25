@@ -1,12 +1,12 @@
 import { MenuItem, RightItem } from '@/types';
 import { isEmpty } from 'lodash';
 
-export const getPageMenuList = (menuList: MenuItem[]): any[] => {
+export const getPageMenuList = (menuList: MenuItem[],rightList:string[]): any[] => {
     return menuList
-      .filter(item => item.pagePermission === 1)
+      .filter(item => item.pagePermission === 1 && rightList.includes(item.key))
       .map(({ pagePermission, children, ...restItem }) => ({
         ...restItem,
-        children: isEmpty(children) ? null : getPageMenuList(children) 
+        children: isEmpty(children) ? null : getPageMenuList(children,rightList) 
       }));
   };
 

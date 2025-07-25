@@ -7,12 +7,17 @@ import RightList from '@/pages/right-manage/RightList';
 import RoleList from '@/pages/right-manage//RoleList';
 import UserList from '@/pages/user-manage/UserList';
 import './App.css';
+import Auth from '@/components/Auth';
 
 const App = () => {
-  const element = useRoutes([
+  const routes = useRoutes([
     {
       path: '/',
-      element: <NewsSandbox />,
+      element: (
+        <Auth>
+          <NewsSandbox />
+        </Auth>
+      ),
       children: [
         {
           index: true,
@@ -74,7 +79,7 @@ const App = () => {
     },
   ]);
 
-  return <div>{element}</div>;
+  return <div style={{ height: '100vh' }}>{routes}</div>;
 };
 
 export default App;

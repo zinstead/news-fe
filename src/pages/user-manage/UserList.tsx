@@ -25,8 +25,11 @@ interface DataType {
 }
 
 const UserList = () => {
-  const [visible, setVisible] = useState(false);
-  const [form] = useForm();
+  const [addVisible, setAddVisible] = useState(false);
+  const [updateVisible, setUpdateVisible] = useState(false);
+  const [addForm] = useForm();
+  const [updateForm] = useForm();
+  const [editId, setEditId] = useState<number>();
 
   const { data: userList, refresh: refreshUserList } = useRequest(async () => {
     const res = await axios.get(`${apiPrefix}/users?_expand=role`);
@@ -37,6 +40,13 @@ const UserList = () => {
     const res = await axios.get(`${apiPrefix}/regions`);
     return res.data;
   });
+  const regionFilters = [
+    ...regionList.map((item: { value: string }) => ({
+      value: item.value,
+      text: item.value,
+    })),
+    { value: '', text: '全球' },
+  ];
 
   const { data: roleList = [] } = useRequest(async () => {
     const res = await axios.get(`${apiPrefix}/roles`);
@@ -50,6 +60,41 @@ const UserList = () => {
     }),
   );
 
+  const onAddUser = () => {
+    addForm.validateFields().then(async () => {
+      const data = addForm.getFieldsValue();
+      const res = await axios.post(`${apiPrefix}/users`, {
+        ...data,
+        roleState: true,
+        default: false,
+      });
+      if (res) {
+        setAddVisible(false);
+        refreshUserList();
+        addForm.resetFields();
+      }
+    });
+  };
+
+  const onUpdateUser = () => {
+    updateForm.validateFields().then(async () => {
+      const data = updateForm.getFieldsValue();
+      const res = await axios.patch(`${apiPrefix}/users/${editId}`, data);
+      if (res) {
+        setUpdateVisible(false);
+        refreshUserList();
+        updateForm.resetFields();
+      }
+    });
+  };
+
+  const onDeleteUser = async (id: number) => {
+    const res = await axios.delete(`${apiPrefix}/users/${id}`);
+    if (res) {
+      refreshUserList();
+    }
+  };
+
   const columns: TableProps<DataType>['columns'] = [
     {
       dataIndex: 'username',
@@ -60,6 +105,10 @@ const UserList = () => {
       title: '区域',
       render(value, record, index) {
         return value ? value : '全球';
+      },
+      filters: regionFilters,
+      onFilter(value, record) {
+        return record.region === value;
       },
     },
     {
@@ -72,8 +121,21 @@ const UserList = () => {
     {
       dataIndex: 'roleState',
       title: '用户状态',
-      render(value, record, index) {
-        return <Switch defaultChecked={value} disabled={record.default} />;
+      render(value, record) {
+        return (
+          <Switch
+            checked={value}
+            onChange={async checked => {
+              const res = await axios.patch(`${apiPrefix}/users/${record.id}`, {
+                roleState: checked,
+              });
+              if (res) {
+                refreshUserList();
+              }
+            }}
+            disabled={record.default}
+          />
+        );
       },
     },
     {
@@ -100,6 +162,10 @@ const UserList = () => {
               icon={<EditOutlined />}
               shape="circle"
               disabled={record.default}
+              onClick={() => {
+                setEditId(record.id);
+                setUpdateVisible(true);
+              }}
             ></Button>
           </Space>
         );
@@ -107,36 +173,13 @@ const UserList = () => {
     },
   ];
 
-  const onAddUser = () => {
-    form.validateFields().then(async () => {
-      const data = form.getFieldsValue();
-      const res = await axios.post(`${apiPrefix}/users`, {
-        ...data,
-        roleState: true,
-        default: false,
-      });
-      if (res) {
-        setVisible(false);
-        refreshUserList();
-        form.resetFields();
-      }
-    });
-  };
-
-  const onDeleteUser = async (id: number) => {
-    const res = await axios.delete(`${apiPrefix}/users/${id}`);
-    if (res) {
-      refreshUserList();
-    }
-  };
-
   return (
     <div>
       <Button
         style={{ marginBottom: 20 }}
         type="primary"
         onClick={() => {
-          setVisible(true);
+          setAddVisible(true);
         }}
       >
         添加用户
@@ -150,14 +193,37 @@ const UserList = () => {
 
       <Modal
         title="添加用户"
-        open={visible}
+        open={addVisible}
         onCancel={() => {
-          setVisible(false);
+          setAddVisible(false);
         }}
         onOk={onAddUser}
       >
         <UserForm
-          form={form}
+          form={addForm}
+          regionOptions={regionList}
+          roleOptions={roleOptions}
+        />
+      </Modal>
+
+      <Modal
+        title="更新用户"
+        open={updateVisible}
+        onCancel={() => {
+          setUpdateVisible(false);
+        }}
+        onOk={onUpdateUser}
+        afterOpenChange={open => {
+          if (open) {
+            const userInfo = userList.find(
+              (item: { id: number }) => item.id === editId,
+            );
+            updateForm.setFieldsValue(userInfo);
+          }
+        }}
+      >
+        <UserForm
+          form={updateForm}
           regionOptions={regionList}
           roleOptions={roleOptions}
         />

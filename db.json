@@ -32,8 +32,8 @@
       "password": "123",
       "roleState": true,
       "default": false,
-      "region": "",
-      "roleId": 1,
+      "region": "南美洲",
+      "roleId": 2,
       "id": 4
     },
     {
@@ -146,24 +146,22 @@
       "id": 3,
       "roleName": "区域编辑",
       "roleType": 3,
-      "rights": {
-        "checked": [
-          "/news-manage",
-          "/news-manage/update/:id",
-          "/news-manage/preview/:id",
-          "/news-manage/draft",
-          "/audit-manage",
-          "/audit-manage/list",
-          "/publish-manage",
-          "/publish-manage/unpublished",
-          "/publish-manage/published",
-          "/publish-manage/sunset",
-          "/news-manage/list",
-          "/news-manage/add",
-          "/home"
-        ],
-        "halfChecked": []
-      }
+      "rights": [
+        "/news-manage",
+        "/news-manage/update/:id",
+        "/news-manage/preview/:id",
+        "/news-manage/draft",
+        "/audit-manage",
+        "/audit-manage/list",
+        "/publish-manage",
+        "/publish-manage/unpublished",
+        "/publish-manage/published",
+        "/publish-manage/sunset",
+        "/news-manage/list",
+        "/news-manage/add",
+        "/home",
+        "/audit-manage/audit"
+      ]
     }
   ],
   "children": [
