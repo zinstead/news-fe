@@ -81,7 +81,7 @@ const NewsSandbox = () => {
             <Menu
               theme="dark"
               mode="inline"
-              items={getPageMenuList(menuList, role.rights)}
+              items={getPageMenuList(menuList, role?.rights)}
               selectedKeys={selectedKeys}
               defaultOpenKeys={openKeys}
               onClick={info => {

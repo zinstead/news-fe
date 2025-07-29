@@ -114,6 +114,9 @@ module.exports = {
         pathRewrite: { '^/api': '' },
       },
     ],
+    client: {
+      logging: 'error'
+    }
   },
   mode: 'development',
   devtool: 'eval-source-map',

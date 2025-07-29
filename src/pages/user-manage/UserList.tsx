@@ -1,4 +1,5 @@
 import UserForm from '@/components/UserForm';
+import { RoleType } from '@/types';
 import { getUserToken } from '@/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
@@ -36,26 +37,27 @@ const UserList = () => {
     const res = await axios.get(`/users?_expand=role`);
     // 如果是超级管理员，能看到所有用户；如果是区域管理员，只能看到自己和该区域下的所有编辑
     let userList;
-    if (role.roleType === 1) {
+    if (role.roleType === RoleType.SuperAdmin) {
       userList = res.data;
     } else {
       userList = res.data.filter(
         (item: any) =>
-          item.id === id || (item.roleId === 3 && item.region === region),
+          item.id === id || (item.roleId === RoleType.editor && item.region === region),
       );
     }
     return userList;
   });
 
+  // 区域管理员：创建用户时只能创建该区域的编辑，无法更新用户的区域和角色
   const checkRegionDisabled = (isUpdated: boolean, regionName: string) => {
     if (isUpdated) {
-      if (role.roleType === 1) {
+      if (role.roleType === RoleType.SuperAdmin) {
         return false;
       } else {
         return true;
       }
     } else {
-      if (role.roleType === 1) {
+      if (role.roleType === RoleType.SuperAdmin) {
         return false;
       } else {
         return regionName !== region;
@@ -65,16 +67,16 @@ const UserList = () => {
 
   const checkRoleDisabled = (isUpdated: boolean, roleType: number) => {
     if (isUpdated) {
-      if (role.roleType === 1) {
+      if (role.roleType === RoleType.SuperAdmin) {
         return false;
       } else {
         return true;
       }
     } else {
-      if (role.roleType === 1) {
+      if (role.roleType === RoleType.SuperAdmin) {
         return false;
       } else {
-        return roleType !== 3;
+        return roleType !== RoleType.editor;
       }
     }
   };

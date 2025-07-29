@@ -1,15 +1,15 @@
-export interface MenuItem{
-    key:string;
-    label:string;
-    children:MenuItem[]
-    pagePermission:number;
+export interface MenuItem {
+  key: string;
+  label: string;
+  children: MenuItem[]
+  pagePermission: number;
 }
 
-export interface RightItem{
-    id:string;
-    key:string;
-    label:string;
-    children:RightItem[]
+export interface RightItem {
+  id: string;
+  key: string;
+  label: string;
+  children: RightItem[]
 }
 
 export interface TreeNode {
@@ -22,4 +22,10 @@ export interface ConvertedNode {
   title: string;
   children?: ConvertedNode[];
   [key: string]: any;
+}
+
+export enum RoleType {
+  SuperAdmin = 1,
+  admin = 2,
+  editor = 3
 }
