@@ -1,4 +1,3 @@
-import { apiPrefix } from '@/api';
 import UserForm from '@/components/UserForm';
 import { getUserToken } from '@/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
@@ -34,7 +33,7 @@ const UserList = () => {
   const { id, role, region } = getUserToken();
 
   const { data: userList, refresh: refreshUserList } = useRequest(async () => {
-    const res = await axios.get(`${apiPrefix}/users?_expand=role`);
+    const res = await axios.get(`/users?_expand=role`);
     // 如果是超级管理员，能看到所有用户；如果是区域管理员，只能看到自己和该区域下的所有编辑
     let userList;
     if (role.roleType === 1) {
@@ -81,7 +80,7 @@ const UserList = () => {
   };
 
   const { data: regionList = [] } = useRequest(async () => {
-    const res = await axios.get(`${apiPrefix}/regions`);
+    const res = await axios.get(`/regions`);
     return res.data;
   });
   const regionFilters = [
@@ -101,7 +100,7 @@ const UserList = () => {
   }));
 
   const { data: roleList = [] } = useRequest(async () => {
-    const res = await axios.get(`${apiPrefix}/roles`);
+    const res = await axios.get(`/roles`);
     return res.data;
   });
   const roleOptions = roleList.map(
@@ -123,7 +122,7 @@ const UserList = () => {
   const onAddUser = () => {
     addForm.validateFields().then(async () => {
       const data = addForm.getFieldsValue();
-      const res = await axios.post(`${apiPrefix}/users`, {
+      const res = await axios.post(`/users`, {
         ...data,
         roleState: true,
         default: false,
@@ -139,7 +138,7 @@ const UserList = () => {
   const onUpdateUser = () => {
     updateForm.validateFields().then(async () => {
       const data = updateForm.getFieldsValue();
-      const res = await axios.patch(`${apiPrefix}/users/${editId}`, data);
+      const res = await axios.patch(`/users/${editId}`, data);
       if (res) {
         setUpdateVisible(false);
         refreshUserList();
@@ -149,7 +148,7 @@ const UserList = () => {
   };
 
   const onDeleteUser = async (id: number) => {
-    const res = await axios.delete(`${apiPrefix}/users/${id}`);
+    const res = await axios.delete(`/users/${id}`);
     if (res) {
       refreshUserList();
     }
@@ -186,7 +185,7 @@ const UserList = () => {
           <Switch
             checked={value}
             onChange={async checked => {
-              const res = await axios.patch(`${apiPrefix}/users/${record.id}`, {
+              const res = await axios.patch(`/users/${record.id}`, {
                 roleState: checked,
               });
               if (res) {

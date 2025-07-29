@@ -4,7 +4,6 @@ import styles from './index.module.less';
 import { useForm } from 'antd/es/form/Form';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { apiPrefix } from '@/api';
 
 const Login = () => {
   const [form] = useForm();
@@ -14,7 +13,7 @@ const Login = () => {
     try {
       await form.validateFields();
       const { username, password } = form.getFieldsValue();
-      const res = await axios.get(`${apiPrefix}/users?_expand=role`, {
+      const res = await axios.get(`/users?_expand=role`, {
         params: { username, password, roleState: true },
       });
       if (res.data.length === 0) {

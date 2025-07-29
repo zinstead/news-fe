@@ -14,7 +14,6 @@ import {
 import axios from 'axios';
 import { useRequest } from 'ahooks';
 import { useSidebarStore } from '@/zustand/store';
-import { apiPrefix } from '@/api';
 
 interface DataType {
   id: number;
@@ -33,13 +32,17 @@ const RightList = () => {
   const onEditPermission = async (item: DataType) => {
     const { id, grade, pagePermission } = item;
     if (grade === 1) {
-      await axios.patch(`${apiPrefix}/rights/${id}`, { pagePermission: pagePermission === 1 ? 0 : 1 })
+      await axios.patch(`/rights/${id}`, {
+        pagePermission: pagePermission === 1 ? 0 : 1,
+      });
     } else {
-      await axios.patch(`${apiPrefix}/children/${id}`, { pagePermission: pagePermission === 1 ? 0 : 1 })
+      await axios.patch(`/children/${id}`, {
+        pagePermission: pagePermission === 1 ? 0 : 1,
+      });
     }
     refreshRightList();
     refreshMenuList();
-  }
+  };
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -75,7 +78,18 @@ const RightList = () => {
             >
               <Button danger shape="circle" icon={<DeleteOutlined />}></Button>
             </Popconfirm>
-            <Popover title='页面配置项' content={<Switch defaultChecked={pagePermission === 1} onChange={() => { onEditPermission(item) }} disabled={pagePermission === undefined} />} >
+            <Popover
+              title="页面配置项"
+              content={
+                <Switch
+                  defaultChecked={pagePermission === 1}
+                  onChange={() => {
+                    onEditPermission(item);
+                  }}
+                  disabled={pagePermission === undefined}
+                />
+              }
+            >
               <Button
                 type="primary"
                 icon={<EditOutlined />}
@@ -91,7 +105,7 @@ const RightList = () => {
 
   const { data: rightList, refresh: refreshRightList } = useRequest(
     async () => {
-      const res = await axios.get(`${apiPrefix}/rights?_embed=children`);
+      const res = await axios.get(`/rights?_embed=children`);
       return getRightList(res.data);
     },
   );
@@ -99,9 +113,9 @@ const RightList = () => {
   const handleDelete = async (id: number, grade: number) => {
     if (grade === 1) {
       // 这样做会同时删除包含该外键的记录
-      await axios.delete(`${apiPrefix}/rights/${id}`);
+      await axios.delete(`/rights/${id}`);
     } else if (grade === 2) {
-      await axios.delete(`${apiPrefix}/children/${id}`);
+      await axios.delete(`/children/${id}`);
     }
     messageApi.success('删除成功');
     refreshRightList();

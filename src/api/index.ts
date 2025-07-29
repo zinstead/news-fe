@@ -1,1 +1,0 @@
-export const apiPrefix = 'http://localhost:3000';

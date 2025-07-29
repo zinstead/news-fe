@@ -1,4 +1,3 @@
-import { apiPrefix } from '@/api';
 import { convertLabelToTitle } from '@/utils';
 import { DeleteOutlined, UnorderedListOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
@@ -25,12 +24,12 @@ const RoleList = () => {
   const [modalVisible, setModalVisible] = useState(false);
 
   const { data: roleList, refresh: refreshRoleList } = useRequest(async () => {
-    const res = await axios.get(`${apiPrefix}/roles`);
+    const res = await axios.get(`/roles`);
     return res.data;
   });
 
   const { data: rightList } = useRequest(async () => {
-    const res = await axios.get(`${apiPrefix}/rights?_embed=children`);
+    const res = await axios.get(`/rights?_embed=children`);
     return res.data;
   });
 
@@ -38,13 +37,13 @@ const RoleList = () => {
   const [curRightId, setCurRightId] = useState<number>();
 
   const handleDelete = async (id: number) => {
-    await axios.delete(`${apiPrefix}/roles/${id}`);
+    await axios.delete(`/roles/${id}`);
     refreshRoleList();
   };
 
   const handleEditRights = async () => {
     setModalVisible(false);
-    await axios.patch(`${apiPrefix}/roles/${curRightId}`, {
+    await axios.patch(`/roles/${curRightId}`, {
       rights: checkedRightKeys,
     });
     refreshRoleList();

@@ -3,6 +3,7 @@ const os = require('os');
 const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
+const ForkTsCheckerWebpackPlugin = require('fork-ts-checker-webpack-plugin');
 
 const threads = os.cpus().length - 1;
 
@@ -100,6 +101,7 @@ module.exports = {
       favicon: path.resolve(__dirname, '../public/favicon.ico'),
     }),
     new ReactRefreshWebpackPlugin(),
+    new ForkTsCheckerWebpackPlugin({ async: false }),
   ],
   devServer: {
     open: true,

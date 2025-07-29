@@ -7,17 +7,12 @@ import RightList from '@/pages/right-manage/RightList';
 import RoleList from '@/pages/right-manage//RoleList';
 import UserList from '@/pages/user-manage/UserList';
 import './App.css';
-import Auth from '@/components/Auth';
 
 const App = () => {
   const routes = useRoutes([
     {
       path: '/',
-      element: (
-        <Auth>
-          <NewsSandbox />
-        </Auth>
-      ),
+      element: <NewsSandbox />,
       children: [
         {
           index: true,
@@ -62,10 +57,6 @@ const App = () => {
               element: <UserList />,
             },
           ],
-        },
-        {
-          path: '*',
-          element: <div>未匹配页面</div>,
         },
       ],
     },

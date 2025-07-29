@@ -19,12 +19,15 @@ import axios from 'axios';
 import { getPageMenuList, getUserToken } from '@/utils';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
-import { apiPrefix } from '@/api';
 import { useSidebarStore } from '@/zustand/store';
+import Auth from '@/components/Auth';
+import nProgress from 'nprogress';
+import 'nprogress/nprogress.css';
 
 const { Header, Sider, Content } = Layout;
 
 const NewsSandbox = () => {
+  nProgress.start();
   const [collapsed, setCollapsed] = useState(false);
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -56,7 +59,7 @@ const NewsSandbox = () => {
 
   const { data: menuList = [], refresh: refreshMenuList } = useRequest(
     async () => {
-      const res = await axios.get(`${apiPrefix}/rights?_embed=children`);
+      const res = await axios.get(`/rights?_embed=children`);
       return res.data;
     },
   );
@@ -64,6 +67,10 @@ const NewsSandbox = () => {
   useEffect(() => {
     setRefreshMenuList(refreshMenuList);
   }, []);
+
+  useEffect(() => {
+    nProgress.done();
+  });
 
   return (
     <Layout style={{ height: '100vh' }}>
@@ -117,7 +124,9 @@ const NewsSandbox = () => {
             borderRadius: borderRadiusLG,
           }}
         >
-          <Outlet />
+          <Auth>
+            <Outlet />
+          </Auth>
         </Content>
       </Layout>
     </Layout>
