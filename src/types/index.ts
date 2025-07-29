@@ -11,3 +11,15 @@ export interface RightItem{
     label:string;
     children:RightItem[]
 }
+
+export interface TreeNode {
+  label: string;
+  children?: TreeNode[];
+  [key: string]: any;
+}
+
+export interface ConvertedNode {
+  title: string;
+  children?: ConvertedNode[];
+  [key: string]: any;
+}

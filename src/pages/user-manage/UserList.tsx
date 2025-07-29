@@ -1,5 +1,6 @@
 import { apiPrefix } from '@/api';
 import UserForm from '@/components/UserForm';
+import { getUserToken } from '@/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
 import {
@@ -30,11 +31,54 @@ const UserList = () => {
   const [addForm] = useForm();
   const [updateForm] = useForm();
   const [editId, setEditId] = useState<number>();
+  const { id, role, region } = getUserToken();
 
   const { data: userList, refresh: refreshUserList } = useRequest(async () => {
     const res = await axios.get(`${apiPrefix}/users?_expand=role`);
-    return res.data;
+    // 如果是超级管理员，能看到所有用户；如果是区域管理员，只能看到自己和该区域下的所有编辑
+    let userList;
+    if (role.roleType === 1) {
+      userList = res.data;
+    } else {
+      userList = res.data.filter(
+        (item: any) =>
+          item.id === id || (item.roleId === 3 && item.region === region),
+      );
+    }
+    return userList;
   });
+
+  const checkRegionDisabled = (isUpdated: boolean, regionName: string) => {
+    if (isUpdated) {
+      if (role.roleType === 1) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      if (role.roleType === 1) {
+        return false;
+      } else {
+        return regionName !== region;
+      }
+    }
+  };
+
+  const checkRoleDisabled = (isUpdated: boolean, roleType: number) => {
+    if (isUpdated) {
+      if (role.roleType === 1) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      if (role.roleType === 1) {
+        return false;
+      } else {
+        return roleType !== 3;
+      }
+    }
+  };
 
   const { data: regionList = [] } = useRequest(async () => {
     const res = await axios.get(`${apiPrefix}/regions`);
@@ -47,6 +91,14 @@ const UserList = () => {
     })),
     { value: '', text: '全球' },
   ];
+  const regionAddOptions = regionFilters.map(item => ({
+    ...item,
+    disabled: checkRegionDisabled(false, item.value),
+  }));
+  const regionUpdateOptions = regionFilters.map(item => ({
+    ...item,
+    disabled: checkRegionDisabled(true, item.value),
+  }));
 
   const { data: roleList = [] } = useRequest(async () => {
     const res = await axios.get(`${apiPrefix}/roles`);
@@ -59,6 +111,14 @@ const UserList = () => {
       label: item.roleName,
     }),
   );
+  const roleAddOptions = roleOptions.map((item: any) => ({
+    ...item,
+    disabled: checkRoleDisabled(false, item.value),
+  }));
+  const roleUpdateOptions = roleOptions.map((item: any) => ({
+    ...item,
+    disabled: checkRoleDisabled(true, item.value),
+  }));
 
   const onAddUser = () => {
     addForm.validateFields().then(async () => {
@@ -201,8 +261,8 @@ const UserList = () => {
       >
         <UserForm
           form={addForm}
-          regionOptions={regionList}
-          roleOptions={roleOptions}
+          regionOptions={regionAddOptions}
+          roleOptions={roleAddOptions}
         />
       </Modal>
 
@@ -224,8 +284,8 @@ const UserList = () => {
       >
         <UserForm
           form={updateForm}
-          regionOptions={regionList}
-          roleOptions={roleOptions}
+          regionOptions={regionUpdateOptions}
+          roleOptions={roleUpdateOptions}
         />
       </Modal>
     </div>

@@ -16,7 +16,7 @@ import {
 import { useEffect, useState } from 'react';
 import styles from './index.module.less';
 import axios from 'axios';
-import { getPageMenuList } from '@/utils';
+import { getPageMenuList, getUserToken } from '@/utils';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useRequest } from 'ahooks';
 import { apiPrefix } from '@/api';
@@ -30,8 +30,7 @@ const NewsSandbox = () => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
 
-  const userToken = localStorage.getItem('token') ?? `{}`;
-  const { username, role } = JSON.parse(userToken);
+  const { username, role } = getUserToken();
 
   const items: MenuProps['items'] = [
     {
