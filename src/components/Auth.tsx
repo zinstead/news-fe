@@ -29,8 +29,9 @@ const Auth = (props: { children: JSX.Element }) => {
   if (!token) {
     return null;
   } else if (
-    rightList[pathname]?.pagePermission !== 1 ||
-    !role?.rights.includes(pathname)
+    pathname !== '/' &&
+    (rightList[pathname]?.pagePermission !== 1 ||
+      !role?.rights.includes(pathname))
   ) {
     return <div>403 没有权限访问</div>;
   }

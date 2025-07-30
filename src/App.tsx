@@ -6,6 +6,7 @@ import NotFound from '@/pages/404';
 import RightList from '@/pages/right-manage/RightList';
 import RoleList from '@/pages/right-manage//RoleList';
 import UserList from '@/pages/user-manage/UserList';
+import NewsAdd from './pages/news-manage/NewsAdd';
 import './App.css';
 
 const App = () => {
@@ -55,6 +56,16 @@ const App = () => {
             {
               path: 'list',
               element: <UserList />,
+            },
+          ],
+        },
+        {
+          path: 'news-manage',
+          element: <Outlet />,
+          children: [
+            {
+              path: 'add',
+              element: <NewsAdd />,
             },
           ],
         },
