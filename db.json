@@ -692,6 +692,253 @@
       "star": 0,
       "view": 0,
       "id": 19
+    },
+    {
+      "title": "test",
+      "categoryId": "时事新闻",
+      "content": {
+        "_immutable": {
+          "allowUndo": true,
+          "currentContent": {
+            "entityMap": {},
+            "blockMap": {
+              "frvc8": {
+                "key": "frvc8",
+                "type": "unstyled",
+                "text": "123",
+                "characterList": [
+                  {
+                    "style": [
+                      "BOLD"
+                    ],
+                    "entity": null
+                  },
+                  {
+                    "style": [
+                      "BOLD"
+                    ],
+                    "entity": null
+                  },
+                  {
+                    "style": [
+                      "BOLD"
+                    ],
+                    "entity": null
+                  }
+                ],
+                "depth": 0,
+                "data": {}
+              }
+            },
+            "selectionBefore": {
+              "anchorKey": "frvc8",
+              "anchorOffset": 3,
+              "focusKey": "frvc8",
+              "focusOffset": 0,
+              "isBackward": true,
+              "hasFocus": true
+            },
+            "selectionAfter": {
+              "anchorKey": "frvc8",
+              "anchorOffset": 3,
+              "focusKey": "frvc8",
+              "focusOffset": 0,
+              "isBackward": true,
+              "hasFocus": true
+            }
+          },
+          "decorator": {
+            "_decorators": [
+              {}
+            ]
+          },
+          "directionMap": {
+            "frvc8": "LTR"
+          },
+          "forceSelection": false,
+          "inCompositionMode": false,
+          "inlineStyleOverride": null,
+          "lastChangeType": "change-inline-style",
+          "nativelyRenderedContent": null,
+          "redoStack": [],
+          "selection": {
+            "anchorKey": "frvc8",
+            "anchorOffset": 0,
+            "focusKey": "frvc8",
+            "focusOffset": 0,
+            "isBackward": false,
+            "hasFocus": true
+          },
+          "treeMap": {
+            "frvc8": [
+              {
+                "start": 0,
+                "end": 3,
+                "decoratorKey": null,
+                "leaves": [
+                  {
+                    "start": 0,
+                    "end": 3
+                  }
+                ]
+              }
+            ]
+          },
+          "undoStack": [
+            {
+              "entityMap": {},
+              "blockMap": {
+                "frvc8": {
+                  "key": "frvc8",
+                  "type": "unstyled",
+                  "text": "123",
+                  "characterList": [
+                    {
+                      "style": [],
+                      "entity": null
+                    },
+                    {
+                      "style": [],
+                      "entity": null
+                    },
+                    {
+                      "style": [],
+                      "entity": null
+                    }
+                  ],
+                  "depth": 0,
+                  "data": {}
+                }
+              },
+              "selectionBefore": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 0,
+                "focusKey": "frvc8",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": true
+              },
+              "selectionAfter": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 3,
+                "focusKey": "frvc8",
+                "focusOffset": 3,
+                "isBackward": false,
+                "hasFocus": true
+              }
+            },
+            {
+              "entityMap": {},
+              "blockMap": {
+                "frvc8": {
+                  "key": "frvc8",
+                  "type": "unstyled",
+                  "text": "",
+                  "characterList": [],
+                  "depth": 0,
+                  "data": {}
+                }
+              },
+              "selectionBefore": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 3,
+                "focusKey": "frvc8",
+                "focusOffset": 3,
+                "isBackward": false,
+                "hasFocus": true
+              },
+              "selectionAfter": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 0,
+                "focusKey": "frvc8",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": true
+              }
+            },
+            {
+              "entityMap": {},
+              "blockMap": {
+                "frvc8": {
+                  "key": "frvc8",
+                  "type": "unstyled",
+                  "text": "123",
+                  "characterList": [
+                    {
+                      "style": [],
+                      "entity": null
+                    },
+                    {
+                      "style": [],
+                      "entity": null
+                    },
+                    {
+                      "style": [],
+                      "entity": null
+                    }
+                  ],
+                  "depth": 0,
+                  "data": {}
+                }
+              },
+              "selectionBefore": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 0,
+                "focusKey": "frvc8",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": true
+              },
+              "selectionAfter": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 3,
+                "focusKey": "frvc8",
+                "focusOffset": 3,
+                "isBackward": false,
+                "hasFocus": true
+              }
+            },
+            {
+              "entityMap": {},
+              "blockMap": {
+                "frvc8": {
+                  "key": "frvc8",
+                  "type": "unstyled",
+                  "text": "",
+                  "characterList": [],
+                  "depth": 0,
+                  "data": {}
+                }
+              },
+              "selectionBefore": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 0,
+                "focusKey": "frvc8",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false
+              },
+              "selectionAfter": {
+                "anchorKey": "frvc8",
+                "anchorOffset": 0,
+                "focusKey": "frvc8",
+                "focusOffset": 0,
+                "isBackward": false,
+                "hasFocus": false
+              }
+            }
+          ]
+        }
+      },
+      "region": "",
+      "author": "admin",
+      "roleId": 1,
+      "auditState": 0,
+      "publishState": 0,
+      "createTime": 1753963724639,
+      "star": 0,
+      "view": 0,
+      "id": 20
     }
   ]
 }

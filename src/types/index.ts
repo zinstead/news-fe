@@ -23,9 +23,3 @@ export interface ConvertedNode {
   children?: ConvertedNode[];
   [key: string]: any;
 }
-
-export enum RoleType {
-  SuperAdmin = 1,
-  admin = 2,
-  editor = 3
-}

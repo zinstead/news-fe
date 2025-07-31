@@ -1,5 +1,5 @@
 import UserForm from '@/components/UserForm';
-import { RoleType } from '@/types';
+import { RoleType } from '@/constant';
 import { getUserToken } from '@/utils';
 import { DeleteOutlined, EditOutlined } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
@@ -42,7 +42,8 @@ const UserList = () => {
     } else {
       userList = res.data.filter(
         (item: any) =>
-          item.id === id || (item.roleId === RoleType.editor && item.region === region),
+          item.id === id ||
+          (item.roleId === RoleType.Editor && item.region === region),
       );
     }
     return userList;
@@ -76,7 +77,7 @@ const UserList = () => {
       if (role.roleType === RoleType.SuperAdmin) {
         return false;
       } else {
-        return roleType !== RoleType.editor;
+        return roleType !== RoleType.Editor;
       }
     }
   };

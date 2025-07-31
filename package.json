@@ -65,6 +65,7 @@
   "dependencies": {
     "@ant-design/icons": "^6.0.0",
     "@babel/runtime": "^7.26.0",
+    "@types/draftjs-to-html": "^0.8.4",
     "@types/nprogress": "^0.2.3",
     "@types/react": "18",
     "@types/react-dom": "18",
@@ -75,6 +76,7 @@
     "bin-wrapper-china": "^0.1.0",
     "core-js": "^3.39.0",
     "draft-js": "^0.11.7",
+    "draftjs-to-html": "^0.9.1",
     "json-server": "0.17.4",
     "lodash": "^4.17.21",
     "nprogress": "^0.2.0",
@@ -90,7 +92,9 @@
     "not dead"
   ],
   "resolutions": {
-    "bin-wrapper": "npm:bin-wrapper-china"
+    "bin-wrapper": "npm:bin-wrapper-china",
+    "react":"18.3.1",
+    "react-dom":"18.3.1"
   },
   "engines": {
     "node": "18.x"

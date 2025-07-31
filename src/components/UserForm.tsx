@@ -8,7 +8,7 @@ const UserForm = (props: {
 }) => {
   const { regionOptions, roleOptions, form } = props;
   const roleId = Form.useWatch('roleId', form);
-  const disabled = roleId === RoleType['超级管理员'];
+  const disabled = roleId === RoleType.SuperAdmin;
 
   return (
     <div>
@@ -30,7 +30,7 @@ const UserForm = (props: {
           <Select
             options={roleOptions}
             onChange={value => {
-              if (value === RoleType['超级管理员']) {
+              if (value === RoleType.SuperAdmin) {
                 form.setFieldValue('region', '');
               }
             }}
