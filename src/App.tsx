@@ -6,8 +6,9 @@ import NotFound from '@/pages/404';
 import RightList from '@/pages/right-manage/RightList';
 import RoleList from '@/pages/right-manage//RoleList';
 import UserList from '@/pages/user-manage/UserList';
-import NewsAdd from './pages/news-manage/NewsAdd';
+import NewsAdd from '@/pages/news-manage/NewsAdd';
 import './App.css';
+import NewsDraft from '@/pages/news-manage/NewsDraft';
 
 const App = () => {
   const routes = useRoutes([
@@ -66,6 +67,10 @@ const App = () => {
             {
               path: 'add',
               element: <NewsAdd />,
+            },
+            {
+              path: 'draft',
+              element: <NewsDraft />,
             },
           ],
         },

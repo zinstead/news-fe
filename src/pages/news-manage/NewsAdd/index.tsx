@@ -86,7 +86,14 @@ const NewsAdd = () => {
             label="新闻分类"
             rules={[{ required: true }]}
           >
-            <Select options={categoryList}></Select>
+            <Select
+              options={categoryList.map(
+                (item: { label: string; id: number }) => ({
+                  label: item.label,
+                  value: item.id,
+                }),
+              )}
+            ></Select>
           </Form.Item>
         </Form>
       ),
