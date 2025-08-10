@@ -6,17 +6,18 @@ import {
   notification,
   Select,
   Steps,
-} from 'antd';
-import { useState } from 'react';
-import styles from './index.module.less';
-import { useForm } from 'antd/es/form/Form';
-import { useRequest } from 'ahooks';
-import axios from 'axios';
-import NewsEditor from '@/components/news-manage/NewsEditor';
-import { getUserToken } from '@/utils';
-import { AuditState, PublishState } from '@/constant';
-import { useNavigate } from 'react-router-dom';
-import { EditorState } from 'draft-js';
+} from "antd";
+import { useState } from "react";
+import styles from "./index.module.less";
+import { useForm } from "antd/es/form/Form";
+import { useRequest } from "ahooks";
+import axios from "axios";
+import NewsEditor from "@/components/news-manage/NewsEditor";
+import { getUserToken } from "@/utils";
+import { AuditState, PublishState } from "@/constant";
+import { useNavigate } from "react-router-dom";
+import { convertToRaw, EditorState } from "draft-js";
+import draftToHtml from "draftjs-to-html";
 
 const NewsAdd = () => {
   const navigate = useNavigate();
@@ -25,7 +26,7 @@ const NewsAdd = () => {
   const [editorContent, setEditorContent] = useState<EditorState>();
 
   const { data: categoryList = [] } = useRequest(async () => {
-    const res = await axios.get('/categories');
+    const res = await axios.get("/categories");
     if (res) {
       return res.data;
     }
@@ -38,10 +39,14 @@ const NewsAdd = () => {
   const handleSave = async (auditState: AuditState) => {
     const formData = form.getFieldsValue();
     const { username, region, roleId } = getUserToken();
-    const res = await axios.post('/news', {
+    const regionValue = region ? region : "全球";
+    const content = editorContent
+      ? draftToHtml(convertToRaw(editorContent.getCurrentContent()))
+      : "";
+    const res = await axios.post("/news", {
       ...formData,
-      content: editorContent,
-      region,
+      content,
+      region: regionValue,
       author: username,
       roleId,
       auditState: auditState,
@@ -53,36 +58,36 @@ const NewsAdd = () => {
     if (res) {
       const path =
         auditState === AuditState.Unaudited
-          ? '/news-manage/draft'
-          : '/audit-manage/list';
+          ? "/news-manage/draft"
+          : "/audit-manage/list";
       const msg =
         auditState === AuditState.Unaudited
-          ? '保存成功！你可以到草稿箱中查看。'
-          : '提交成功！你可以到审核列表中查看。';
+          ? "保存成功！你可以到草稿箱中查看。"
+          : "提交成功！你可以到审核列表中查看。";
       navigate(path);
       notification.success({
         description: msg,
-        message: '通知',
-        placement: 'bottomRight',
+        message: "通知",
+        placement: "bottomRight",
       });
     }
   };
 
   const steps = [
     {
-      title: '基本信息',
-      subtitle: '新闻标题，新闻分类',
+      title: "基本信息",
+      subtitle: "新闻标题，新闻分类",
       content: (
         <Form form={form}>
           <Form.Item
-            name={'title'}
+            name={"title"}
             label="新闻标题"
             rules={[{ required: true }]}
           >
             <Input />
           </Form.Item>
           <Form.Item
-            name={'categoryId'}
+            name={"categoryId"}
             label="新闻分类"
             rules={[{ required: true }]}
           >
@@ -91,7 +96,7 @@ const NewsAdd = () => {
                 (item: { label: string; id: number }) => ({
                   label: item.label,
                   value: item.id,
-                }),
+                })
               )}
             ></Select>
           </Form.Item>
@@ -99,18 +104,18 @@ const NewsAdd = () => {
       ),
     },
     {
-      title: '新闻内容',
-      subtitle: '新闻主体内容',
+      title: "新闻内容",
+      subtitle: "新闻主体内容",
       content: <NewsEditor getContent={getContent} />,
     },
     {
-      title: '新闻提交',
-      subtitle: '保存草稿或者提交审核',
+      title: "新闻提交",
+      subtitle: "保存草稿或者提交审核",
       content: null,
     },
   ];
 
-  const items = steps.map(item => ({
+  const items = steps.map((item) => ({
     key: item.title,
     title: item.title,
     description: item.subtitle,
@@ -120,9 +125,9 @@ const NewsAdd = () => {
     <div>
       <h2>撰写新闻</h2>
       <Steps items={items} current={current} />
-      <div style={{ margin: '40px 0' }}>
+      <div style={{ margin: "40px 0" }}>
         {steps.map((item, i) => (
-          <div className={current !== i ? styles.hidden : ''}>
+          <div className={current !== i ? styles.hidden : ""}>
             {item.content}
           </div>
         ))}
@@ -168,7 +173,7 @@ const NewsAdd = () => {
               } catch (error) {}
             } else {
               if (!editorContent?.getCurrentContent().getPlainText()) {
-                message.error('新闻内容不能为空！');
+                message.error("新闻内容不能为空！");
                 return;
               }
               setCurrent(current + 1);

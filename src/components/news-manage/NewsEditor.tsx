@@ -1,13 +1,12 @@
-import { EditorState, convertToRaw } from 'draft-js';
-import { useState } from 'react';
-import { Editor } from 'react-draft-wysiwyg';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import draftToHtml from 'draftjs-to-html';
+import { EditorState } from "draft-js";
+import { useState } from "react";
+import { Editor } from "react-draft-wysiwyg";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
 const NewsEditor = (props: { getContent: (content: EditorState) => void }) => {
   const { getContent } = props;
   const [editorState, setEditorState] = useState<EditorState>(() =>
-    EditorState.createEmpty(),
+    EditorState.createEmpty()
   );
   return (
     <div>
@@ -16,14 +15,12 @@ const NewsEditor = (props: { getContent: (content: EditorState) => void }) => {
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
-        onEditorStateChange={value => {
+        onEditorStateChange={(value) => {
           setEditorState(value);
         }}
         onBlur={() => {
-          // console.log(
-          //   draftToHtml(convertToRaw(editorState.getCurrentContent())),
-          // );
-          // console.log(editorState.getCurrentContent().getPlainText());
+          // draftToHtml(convertToRaw(editorState.getCurrentContent()))
+          // editorState.getCurrentContent().getPlainText()
           getContent(editorState);
         }}
       />

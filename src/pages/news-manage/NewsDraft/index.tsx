@@ -1,4 +1,5 @@
 import { AuditState } from '@/constant';
+import { getUserToken } from '@/utils';
 import {
   DeleteOutlined,
   EditOutlined,
@@ -21,14 +22,22 @@ interface DataType {
 }
 
 const NewsDraft = () => {
-  const { data: newsList = [] } = useRequest(async (author: string) => {
+  const { username } = getUserToken();
+  const { data: newsList = [],refresh:refreshNewsList } = useRequest(async () => {
     const res = await axios.get(`/news?_expand=category`, {
-      params: { author, auditState: AuditState.Unaudited },
+      params: { author: username, auditState: AuditState.Unaudited },
     });
     if (res) {
       return res.data;
     }
   });
+
+  const handleDelete=async(id:number)=>{
+    const res=await axios.delete(`/news/${id}`);
+    if(res){
+      refreshNewsList();
+    }
+  }
 
   const columns: TableProps<DataType>['columns'] = [
     {
@@ -41,8 +50,8 @@ const NewsDraft = () => {
     {
       dataIndex: 'title',
       title: '标题',
-      render: value => {
-        return <Link to={''}>{value}</Link>;
+      render: (value, record, index) => {
+        return <Link to={`/news-manage/preview/${record.id}`}>{value}</Link>;
       },
     },
     {
@@ -65,7 +74,9 @@ const NewsDraft = () => {
       render: (value, record, index) => {
         return (
           <Space>
-            <Popconfirm title="" description="">
+            <Popconfirm title="" description="你确定要删除吗？" onConfirm={()=>{
+              handleDelete(record.id);
+            }}>
               <Button danger shape="circle" icon={<DeleteOutlined />}></Button>
             </Popconfirm>
             <Popconfirm title="" description="">
@@ -86,7 +97,7 @@ const NewsDraft = () => {
 
   return (
     <div>
-      <Table columns={columns} dataSource={newsList} />
+      <Table rowKey={'id'} columns={columns} dataSource={newsList} />
     </div>
   );
 };

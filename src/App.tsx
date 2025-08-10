@@ -9,6 +9,7 @@ import UserList from '@/pages/user-manage/UserList';
 import NewsAdd from '@/pages/news-manage/NewsAdd';
 import './App.css';
 import NewsDraft from '@/pages/news-manage/NewsDraft';
+import NewsPreview from '@/pages/news-manage/NewsPreview';
 
 const App = () => {
   const routes = useRoutes([
@@ -72,6 +73,10 @@ const App = () => {
               path: 'draft',
               element: <NewsDraft />,
             },
+            {
+              path:'preview/:id',
+              element:<NewsPreview/>
+            }
           ],
         },
       ],

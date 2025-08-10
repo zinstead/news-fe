@@ -259,7 +259,7 @@
       "rightId": 14,
       "key": "/news-manage/update/:id",
       "grade": 2,
-      "routepermisson": 1
+      "routePermission": 1
     },
     {
       "id": 18,
@@ -267,7 +267,7 @@
       "rightId": 14,
       "key": "/news-manage/preview/:id",
       "grade": 2,
-      "routepermisson": 1
+      "routePermission": 1
     },
     {
       "id": 19,
@@ -695,179 +695,17 @@
     },
     {
       "title": "qwe",
-      "categoryId": 2,
-      "content": {
-        "_immutable": {
-          "allowUndo": true,
-          "currentContent": {
-            "entityMap": {},
-            "blockMap": {
-              "4hhqf": {
-                "key": "4hhqf",
-                "type": "unstyled",
-                "text": "zxc",
-                "characterList": [
-                  {
-                    "style": [
-                      "ITALIC"
-                    ],
-                    "entity": null
-                  },
-                  {
-                    "style": [
-                      "ITALIC"
-                    ],
-                    "entity": null
-                  },
-                  {
-                    "style": [
-                      "ITALIC"
-                    ],
-                    "entity": null
-                  }
-                ],
-                "depth": 0,
-                "data": {}
-              }
-            },
-            "selectionBefore": {
-              "anchorKey": "4hhqf",
-              "anchorOffset": 3,
-              "focusKey": "4hhqf",
-              "focusOffset": 0,
-              "isBackward": true,
-              "hasFocus": true
-            },
-            "selectionAfter": {
-              "anchorKey": "4hhqf",
-              "anchorOffset": 3,
-              "focusKey": "4hhqf",
-              "focusOffset": 0,
-              "isBackward": true,
-              "hasFocus": true
-            }
-          },
-          "decorator": {
-            "_decorators": [
-              {}
-            ]
-          },
-          "directionMap": {
-            "4hhqf": "LTR"
-          },
-          "forceSelection": true,
-          "inCompositionMode": false,
-          "inlineStyleOverride": null,
-          "lastChangeType": "change-inline-style",
-          "nativelyRenderedContent": null,
-          "redoStack": [],
-          "selection": {
-            "anchorKey": "4hhqf",
-            "anchorOffset": 3,
-            "focusKey": "4hhqf",
-            "focusOffset": 0,
-            "isBackward": true,
-            "hasFocus": true
-          },
-          "treeMap": {
-            "4hhqf": [
-              {
-                "start": 0,
-                "end": 3,
-                "decoratorKey": null,
-                "leaves": [
-                  {
-                    "start": 0,
-                    "end": 3
-                  }
-                ]
-              }
-            ]
-          },
-          "undoStack": [
-            {
-              "entityMap": {},
-              "blockMap": {
-                "4hhqf": {
-                  "key": "4hhqf",
-                  "type": "unstyled",
-                  "text": "zxc",
-                  "characterList": [
-                    {
-                      "style": [],
-                      "entity": null
-                    },
-                    {
-                      "style": [],
-                      "entity": null
-                    },
-                    {
-                      "style": [],
-                      "entity": null
-                    }
-                  ],
-                  "depth": 0,
-                  "data": {}
-                }
-              },
-              "selectionBefore": {
-                "anchorKey": "4hhqf",
-                "anchorOffset": 0,
-                "focusKey": "4hhqf",
-                "focusOffset": 0,
-                "isBackward": false,
-                "hasFocus": true
-              },
-              "selectionAfter": {
-                "anchorKey": "4hhqf",
-                "anchorOffset": 3,
-                "focusKey": "4hhqf",
-                "focusOffset": 3,
-                "isBackward": false,
-                "hasFocus": true
-              }
-            },
-            {
-              "entityMap": {},
-              "blockMap": {
-                "4hhqf": {
-                  "key": "4hhqf",
-                  "type": "unstyled",
-                  "text": "",
-                  "characterList": [],
-                  "depth": 0,
-                  "data": {}
-                }
-              },
-              "selectionBefore": {
-                "anchorKey": "4hhqf",
-                "anchorOffset": 0,
-                "focusKey": "4hhqf",
-                "focusOffset": 0,
-                "isBackward": false,
-                "hasFocus": false
-              },
-              "selectionAfter": {
-                "anchorKey": "4hhqf",
-                "anchorOffset": 0,
-                "focusKey": "4hhqf",
-                "focusOffset": 0,
-                "isBackward": false,
-                "hasFocus": false
-              }
-            }
-          ]
-        }
-      },
-      "region": "",
+      "categoryId": 6,
+      "content": "<p><strong>123</strong></p>\n",
+      "region": "全球",
       "author": "admin",
       "roleId": 1,
       "auditState": 0,
       "publishState": 0,
-      "createTime": 1754026198879,
+      "createTime": 1754581657695,
       "star": 0,
       "view": 0,
-      "id": 22
+      "id": 20
     }
   ]
 }
