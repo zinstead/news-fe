@@ -6,9 +6,9 @@ import {
   VerticalAlignTopOutlined,
 } from '@ant-design/icons';
 import { useRequest } from 'ahooks';
-import { Button, Popconfirm, Space, Table, TableProps } from 'antd';
+import { Button, notification, Popconfirm, Space, Table, TableProps } from 'antd';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface DataType {
   id: number;
@@ -22,8 +22,9 @@ interface DataType {
 }
 
 const NewsDraft = () => {
+  const navigate = useNavigate();
   const { username } = getUserToken();
-  const { data: newsList = [],refresh:refreshNewsList } = useRequest(async () => {
+  const { data: newsList = [], refresh: refreshNewsList } = useRequest(async () => {
     const res = await axios.get(`/news?_expand=category`, {
       params: { author: username, auditState: AuditState.Unaudited },
     });
@@ -32,10 +33,30 @@ const NewsDraft = () => {
     }
   });
 
-  const handleDelete=async(id:number)=>{
-    const res=await axios.delete(`/news/${id}`);
-    if(res){
+  const handleDelete = async (id: number) => {
+    const res = await axios.delete(`/news/${id}`);
+    if (res) {
       refreshNewsList();
+    }
+  }
+
+  const handleEdit = async (id: number) => {
+    navigate(`/news-manage/update/${id}`)
+  }
+
+  const handleSubmit = async (id: number) => {
+    const res = await axios.patch(`/news/${id}`, {
+      auditState: AuditState.Auditing,
+    });
+    if (res) {
+      navigate('/audit-manage/list');
+      const msg =
+        "提交成功！你可以到审核列表中查看。";
+      notification.success({
+        description: msg,
+        message: "通知",
+        placement: "bottomRight",
+      });
     }
   }
 
@@ -74,21 +95,20 @@ const NewsDraft = () => {
       render: (value, record, index) => {
         return (
           <Space>
-            <Popconfirm title="" description="你确定要删除吗？" onConfirm={()=>{
+            <Popconfirm title="" description="你确定要删除吗？" onConfirm={() => {
               handleDelete(record.id);
             }}>
               <Button danger shape="circle" icon={<DeleteOutlined />}></Button>
             </Popconfirm>
-            <Popconfirm title="" description="">
-              <Button shape="circle" icon={<EditOutlined />}></Button>
-            </Popconfirm>
-            <Popconfirm title="" description="">
-              <Button
-                type="primary"
-                shape="circle"
-                icon={<VerticalAlignTopOutlined />}
-              ></Button>
-            </Popconfirm>
+            <Button onClick={() => { handleEdit(record.id) }} shape="circle" icon={<EditOutlined />}></Button>
+            <Button
+              onClick={() => {
+                handleSubmit(record.id);
+              }}
+              type="primary"
+              shape="circle"
+              icon={<VerticalAlignTopOutlined />}
+            ></Button>
           </Space>
         );
       },

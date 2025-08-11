@@ -5,6 +5,7 @@ import {
   message,
   notification,
   Select,
+  Space,
   Steps,
 } from "antd";
 import { useState } from "react";
@@ -13,17 +14,30 @@ import { useForm } from "antd/es/form/Form";
 import { useRequest } from "ahooks";
 import axios from "axios";
 import NewsEditor from "@/components/news-manage/NewsEditor";
-import { getUserToken } from "@/utils";
-import { AuditState, PublishState } from "@/constant";
-import { useNavigate } from "react-router-dom";
+import { AuditState } from "@/constant";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { convertToRaw, EditorState } from "draft-js";
 import draftToHtml from "draftjs-to-html";
+import { ArrowLeftOutlined } from "@ant-design/icons";
+import { convertFromHTML } from 'draft-convert';
 
-const NewsAdd = () => {
+const NewsUpdate = () => {
+  const { id } = useParams();
   const navigate = useNavigate();
   const [current, setCurrent] = useState(0);
   const [form] = useForm();
   const [editorContent, setEditorContent] = useState<EditorState>(EditorState.createEmpty());
+
+  useRequest(async () => {
+    const res = await axios.get(`/news/${id}?_expand=category&_expand=role`);
+    if (res) {
+      const { title, categoryId, content } = res.data;
+      form.setFieldsValue({ title, categoryId });
+      const initContent = EditorState.createWithContent(convertFromHTML(content as string));
+      setEditorContent(initContent);
+      return res.data;
+    }
+  });
 
   const { data: categoryList = [] } = useRequest(async () => {
     const res = await axios.get("/categories");
@@ -38,22 +52,13 @@ const NewsAdd = () => {
 
   const handleSave = async (auditState: AuditState) => {
     const formData = form.getFieldsValue();
-    const { username, region, roleId } = getUserToken();
-    const regionValue = region ? region : "全球";
     const content = editorContent
       ? draftToHtml(convertToRaw(editorContent.getCurrentContent()))
       : "";
-    const res = await axios.post("/news", {
+    const res = await axios.patch(`/news/${id}`, {
       ...formData,
       content,
-      region: regionValue,
-      author: username,
-      roleId,
       auditState: auditState,
-      publishState: PublishState.Unpublished,
-      createTime: Date.now(),
-      star: 0,
-      view: 0,
     });
     if (res) {
       const path =
@@ -123,7 +128,17 @@ const NewsAdd = () => {
 
   return (
     <div>
-      <h2>撰写新闻</h2>
+      <Space size={16}>
+        <Link
+          to={""}
+          onClick={() => {
+            navigate(-1);
+          }}
+        >
+          <ArrowLeftOutlined style={{ fontSize: 24 }} />
+        </Link>
+        <h2>更新新闻</h2>
+      </Space>
       <Steps items={items} current={current} />
       <div style={{ margin: "40px 0" }}>
         {steps.map((item, i) => (
@@ -187,4 +202,4 @@ const NewsAdd = () => {
   );
 };
 
-export default NewsAdd;
+export default NewsUpdate;

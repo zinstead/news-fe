@@ -1,4 +1,5 @@
 import { Navigate, Outlet, useRoutes } from 'react-router-dom';
+import './App.css';
 import NewsSandbox from '@/pages/NewsSandbox';
 import Home from '@/pages/Home';
 import Login from '@/pages/Login';
@@ -7,9 +8,10 @@ import RightList from '@/pages/right-manage/RightList';
 import RoleList from '@/pages/right-manage//RoleList';
 import UserList from '@/pages/user-manage/UserList';
 import NewsAdd from '@/pages/news-manage/NewsAdd';
-import './App.css';
 import NewsDraft from '@/pages/news-manage/NewsDraft';
 import NewsPreview from '@/pages/news-manage/NewsPreview';
+import NewsUpdate from '@/pages/news-manage/NewsUpdate';
+import AuditList from '@/pages/audit-manage/AuditList';
 
 const App = () => {
   const routes = useRoutes([
@@ -74,11 +76,25 @@ const App = () => {
               element: <NewsDraft />,
             },
             {
-              path:'preview/:id',
-              element:<NewsPreview/>
+              path: 'preview/:id',
+              element: <NewsPreview />
+            },
+            {
+              path: 'update/:id',
+              element: <NewsUpdate />
             }
           ],
         },
+        {
+          path: 'audit-manage',
+          element: <Outlet />,
+          children: [
+            {
+              path: 'list',
+              element: <AuditList />
+            }
+          ]
+        }
       ],
     },
     {

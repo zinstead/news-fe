@@ -34,70 +34,70 @@ const NewsPreview = () => {
 
   const items: DescriptionsProps["items"] = newsInfo
     ? [
-        {
-          key: "1",
-          label: "创建者",
-          children: <span>{newsInfo.author}</span>,
-        },
-        {
-          key: "2",
-          label: "创建时间",
-          children: (
-            <span>
-              {moment(newsInfo.createTime).format("YYYY/MM/DD HH:mm:ss")}
-            </span>
-          ),
-        },
-        {
-          key: "3",
-          label: "发布时间",
-          children: (
-            <span>
-              {newsInfo.publishTime
-                ? moment(newsInfo.publishTime).format("YYYY/MM/DD HH:mm:ss")
-                : "-"}
-            </span>
-          ),
-        },
-        {
-          key: "4",
-          label: "区域",
-          children: <span>{newsInfo.region}</span>,
-        },
-        {
-          key: "5",
-          label: "审核状态",
-          children: (
-            <span style={{ color: "red" }}>
-              {auditStateMap[newsInfo.auditState]}
-            </span>
-          ),
-        },
-        {
-          key: "6",
-          label: "发布状态",
-          children: (
-            <span style={{ color: "red" }}>
-              {publishStateMap[newsInfo.publishState]}
-            </span>
-          ),
-        },
-        {
-          key: "7",
-          label: "访问数量",
-          children: <span>{newsInfo.view}</span>,
-        },
-        {
-          key: "8",
-          label: "点赞数量",
-          children: <span>{newsInfo.star}</span>,
-        },
-        {
-          key: "9",
-          label: "评论数量",
-          children: <span>0</span>,
-        },
-      ]
+      {
+        key: "1",
+        label: "创建者",
+        children: <span>{newsInfo.author}</span>,
+      },
+      {
+        key: "2",
+        label: "创建时间",
+        children: (
+          <span>
+            {moment(newsInfo.createTime).format("YYYY/MM/DD HH:mm:ss")}
+          </span>
+        ),
+      },
+      {
+        key: "3",
+        label: "发布时间",
+        children: (
+          <span>
+            {newsInfo.publishTime
+              ? moment(newsInfo.publishTime).format("YYYY/MM/DD HH:mm:ss")
+              : "-"}
+          </span>
+        ),
+      },
+      {
+        key: "4",
+        label: "区域",
+        children: <span>{newsInfo.region}</span>,
+      },
+      {
+        key: "5",
+        label: "审核状态",
+        children: (
+          <span style={{ color: "red" }}>
+            {auditStateMap[newsInfo.auditState]}
+          </span>
+        ),
+      },
+      {
+        key: "6",
+        label: "发布状态",
+        children: (
+          <span style={{ color: "red" }}>
+            {publishStateMap[newsInfo.publishState]}
+          </span>
+        ),
+      },
+      {
+        key: "7",
+        label: "访问数量",
+        children: <span>{newsInfo.view}</span>,
+      },
+      {
+        key: "8",
+        label: "点赞数量",
+        children: <span>{newsInfo.star}</span>,
+      },
+      {
+        key: "9",
+        label: "评论数量",
+        children: <span>0</span>,
+      },
+    ]
     : [];
 
   return (
@@ -107,7 +107,7 @@ const NewsPreview = () => {
           <Descriptions
             title={
               <h2>
-                <Space size={16} style={{ height: 36 }} align="center">
+                <Space size={16} align="center">
                   <Link
                     to={""}
                     onClick={() => {
@@ -121,6 +121,7 @@ const NewsPreview = () => {
                     style={{
                       color: "rgba(0, 0, 0, 0.45)",
                       fontSize: 14,
+                      height: 36,
                     }}
                   >
                     {newsInfo.category.label}

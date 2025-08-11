@@ -1,27 +1,21 @@
 import { EditorState } from "draft-js";
-import { useState } from "react";
 import { Editor } from "react-draft-wysiwyg";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 
-const NewsEditor = (props: { getContent: (content: EditorState) => void }) => {
-  const { getContent } = props;
-  const [editorState, setEditorState] = useState<EditorState>(() =>
-    EditorState.createEmpty()
-  );
+const NewsEditor = (props: { content: EditorState, setContent: (content: EditorState) => void }) => {
+  const { content, setContent } = props;
+  // draftToHtml(convertToRaw(editorState.getCurrentContent()))
+  // editorState.getCurrentContent().getPlainText()
+
   return (
     <div>
       <Editor
-        editorState={editorState}
+        editorState={content}
         toolbarClassName="toolbarClassName"
         wrapperClassName="wrapperClassName"
         editorClassName="editorClassName"
         onEditorStateChange={(value) => {
-          setEditorState(value);
-        }}
-        onBlur={() => {
-          // draftToHtml(convertToRaw(editorState.getCurrentContent()))
-          // editorState.getCurrentContent().getPlainText()
-          getContent(editorState);
+          setContent(value);
         }}
       />
     </div>
