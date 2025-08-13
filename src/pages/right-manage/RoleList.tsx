@@ -1,6 +1,7 @@
-import { convertLabelToTitle } from '@/utils';
-import { DeleteOutlined, UnorderedListOutlined } from '@ant-design/icons';
-import { useRequest } from 'ahooks';
+import { convertLabelToTitle, getUserToken } from "@/utils";
+import { useSidebarStore } from "@/zustand/store";
+import { DeleteOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { useRequest } from "ahooks";
 import {
   Button,
   Modal,
@@ -9,9 +10,9 @@ import {
   Table,
   TableProps,
   Tree,
-} from 'antd';
-import axios from 'axios';
-import { Key, useState } from 'react';
+} from "antd";
+import axios from "axios";
+import { Key, useState } from "react";
 
 interface DataType {
   id: number;
@@ -21,6 +22,8 @@ interface DataType {
 }
 
 const RoleList = () => {
+  const { id } = getUserToken();
+  const refreshMenuList = useSidebarStore((state) => state.refreshMenuList);
   const [modalVisible, setModalVisible] = useState(false);
 
   const { data: roleList, refresh: refreshRoleList } = useRequest(async () => {
@@ -47,28 +50,35 @@ const RoleList = () => {
       rights: checkedRightKeys,
     });
     refreshRoleList();
+    const res = await axios.get(`/users?_expand=role`, {
+      params: { id },
+    });
+    if (res) {
+      localStorage.setItem("token", JSON.stringify(res.data[0]));
+      refreshMenuList();
+    }
   };
 
-  const columns: TableProps<DataType>['columns'] = [
+  const columns: TableProps<DataType>["columns"] = [
     {
-      dataIndex: 'id',
-      title: 'ID',
+      dataIndex: "id",
+      title: "ID",
       render(value) {
         return <b>{value}</b>;
       },
     },
     {
-      dataIndex: 'roleName',
-      title: '角色名称',
+      dataIndex: "roleName",
+      title: "角色名称",
     },
     {
-      title: '操作',
+      title: "操作",
       render(value, record, index) {
         return (
           <Space>
             <Popconfirm
-              title={'删除角色'}
-              description={'你确定要删除该角色吗？'}
+              title={"删除角色"}
+              description={"你确定要删除该角色吗？"}
               onConfirm={() => handleDelete(record.id)}
             >
               <Button danger shape="circle">
@@ -94,7 +104,7 @@ const RoleList = () => {
 
   return (
     <div>
-      <Table dataSource={roleList} columns={columns} rowKey={'id'} />
+      <Table dataSource={roleList} columns={columns} rowKey={"id"} />
       <Modal
         title="权限分配"
         open={modalVisible}
@@ -106,7 +116,7 @@ const RoleList = () => {
           checkable
           checkStrictly
           checkedKeys={checkedRightKeys}
-          onCheck={checkedKeys => {
+          onCheck={(checkedKeys) => {
             const keys = checkedKeys as { checked: Key[]; halfChecked: Key[] };
             setCheckedRightKeys(keys.checked);
           }}

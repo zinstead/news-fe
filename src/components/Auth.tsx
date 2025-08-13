@@ -41,12 +41,6 @@ const Auth = (props: { children: JSX.Element }) => {
         rightList[path]?.routePermission !== 1) ||
       !role?.rights.includes(path)
     ) {
-      console.log(
-        rightList[path]?.pagePermission !== 1 &&
-          rightList[path]?.routePermission !== 1
-      );
-      console.log(!role?.rights.includes(path));
-
       return <div>403 没有权限访问</div>;
     }
   }
