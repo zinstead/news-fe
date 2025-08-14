@@ -54,6 +54,7 @@ const AuditList = () => {
   const handlePublish = async (id: number) => {
     const res = await axios.patch(`/news/${id}`, {
       publishState: PublishState.Published,
+      publishTime: Date.now(),
     });
     if (res) {
       refreshAuditList();

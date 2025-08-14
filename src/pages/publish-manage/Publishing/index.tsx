@@ -3,8 +3,8 @@ import { PublishState } from "@/constant";
 import usePublish from "@/hooks/usePublish";
 import { Button } from "antd";
 
-const Published = () => {
-  const { data, handleSunset } = usePublish(PublishState.Published);
+const Publishing = () => {
+  const { data, handlePublish } = usePublish(PublishState.Publishing);
 
   return (
     <div>
@@ -12,12 +12,12 @@ const Published = () => {
         data={data}
         renderButton={(id) => (
           <Button
-            danger
+            type="primary"
             onClick={() => {
-              handleSunset(id);
+              handlePublish(id);
             }}
           >
-            下线
+            发布
           </Button>
         )}
       />
@@ -25,4 +25,4 @@ const Published = () => {
   );
 };
 
-export default Published;
+export default Publishing;

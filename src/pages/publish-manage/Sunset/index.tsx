@@ -3,8 +3,8 @@ import { PublishState } from "@/constant";
 import usePublish from "@/hooks/usePublish";
 import { Button } from "antd";
 
-const Published = () => {
-  const { data, handleSunset } = usePublish(PublishState.Published);
+const Sunset = () => {
+  const { data, handleDelete } = usePublish(PublishState.Withdrawed);
 
   return (
     <div>
@@ -14,10 +14,10 @@ const Published = () => {
           <Button
             danger
             onClick={() => {
-              handleSunset(id);
+              handleDelete(id);
             }}
           >
-            下线
+            删除
           </Button>
         )}
       />
@@ -25,4 +25,4 @@ const Published = () => {
   );
 };
 
-export default Published;
+export default Sunset;

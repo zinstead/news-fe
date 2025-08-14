@@ -1,3 +1,4 @@
 {
-    "jsJsxSnippets.settings.importReactOnTop": false
+    "jsJsxSnippets.settings.importReactOnTop": false,
+    "cssModules.camelCase": true
 }

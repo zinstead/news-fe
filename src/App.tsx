@@ -15,6 +15,8 @@ import AuditList from "@/pages/audit-manage/AuditList";
 import Published from "@/pages/publish-manage/Published";
 import NewsAudit from "@/pages/audit-manage/NewsAudit";
 import NewsCategory from "@/pages/news-manage/NewsCategory";
+import Publishing from "@/pages/publish-manage/Publishing";
+import Sunset from "@/pages/publish-manage/Sunset";
 
 const App = () => {
   const routes = useRoutes([
@@ -113,6 +115,14 @@ const App = () => {
             {
               path: "published",
               element: <Published />,
+            },
+            {
+              path: "unpublished",
+              element: <Publishing />,
+            },
+            {
+              path: "sunset",
+              element: <Sunset />,
             },
           ],
         },
