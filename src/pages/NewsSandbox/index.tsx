@@ -11,6 +11,7 @@ import {
   Menu,
   MenuProps,
   Space,
+  Spin,
   theme,
 } from "antd";
 import { useEffect, useState } from "react";
@@ -19,7 +20,7 @@ import axios from "axios";
 import { getPageMenuList, getUserToken } from "@/utils";
 import { Outlet, useLocation, useNavigate } from "react-router-dom";
 import { useRequest } from "ahooks";
-import { useSidebarStore } from "@/zustand/store";
+import { useLoadingStore, useSidebarStore } from "@/zustand/store";
 import Auth from "@/components/Auth";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
@@ -54,6 +55,7 @@ const NewsSandbox = () => {
   const { pathname } = useLocation();
   const selectedKeys = [pathname];
   const openKeys = ["/" + pathname.split("/")[1]];
+  const loading = useLoadingStore((state) => state.loading);
 
   const setRefreshMenuList = useSidebarStore(
     (state) => state.setRefreshMenuList
@@ -116,20 +118,22 @@ const NewsSandbox = () => {
             </div>
           </div>
         </Header>
-        <Content
-          style={{
-            margin: "24px 16px",
-            padding: 24,
-            minHeight: 280,
-            overflow: "auto",
-            background: colorBgContainer,
-            borderRadius: borderRadiusLG,
-          }}
-        >
-          <Auth>
-            <Outlet />
-          </Auth>
-        </Content>
+        <Spin spinning={loading}>
+          <Content
+            style={{
+              margin: "24px 16px",
+              padding: 24,
+              minHeight: 280,
+              overflow: "auto",
+              background: colorBgContainer,
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Auth>
+              <Outlet />
+            </Auth>
+          </Content>
+        </Spin>
       </Layout>
     </Layout>
   );
