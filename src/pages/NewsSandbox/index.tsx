@@ -118,22 +118,22 @@ const NewsSandbox = () => {
             </div>
           </div>
         </Header>
-        <Spin spinning={loading}>
-          <Content
-            style={{
-              margin: "24px 16px",
-              padding: 24,
-              minHeight: 280,
-              overflow: "auto",
-              background: colorBgContainer,
-              borderRadius: borderRadiusLG,
-            }}
-          >
+        <Content
+          style={{
+            margin: "24px 16px",
+            padding: 24,
+            minHeight: 280,
+            overflow: "auto",
+            background: colorBgContainer,
+            borderRadius: borderRadiusLG,
+          }}
+        >
+          <Spin spinning={loading}>
             <Auth>
               <Outlet />
             </Auth>
-          </Content>
-        </Spin>
+          </Spin>
+        </Content>
       </Layout>
     </Layout>
   );
