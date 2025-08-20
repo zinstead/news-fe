@@ -8,13 +8,14 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { useRequest } from "ahooks";
-import { Avatar, Card, Col, List, Row, Space } from "antd";
+import { Avatar, Card, Col, Drawer, List, Row, Space } from "antd";
 import Meta from "antd/es/card/Meta";
 import axios from "axios";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import * as echarts from "echarts";
 import { groupBy } from "lodash";
+import { NewsInfo } from "@/types";
 
 interface NewsItem {
   id: number;
@@ -22,12 +23,17 @@ interface NewsItem {
 }
 
 const Home = () => {
+  const [visible, setVisible] = useState(false);
+  const barRef = useRef<HTMLDivElement>(null);
+  const pieRef = useRef<HTMLDivElement>(null);
+  const pieChart = useRef<echarts.ECharts | null>(null);
+
   const { data: viewList } = useRequest(async () => {
     const res = await axios.get(
       `/news?publishState=${PublishState.Published}&_expand=category&_sort=view&_order=desc&_limit=10`
     );
     if (res) {
-      return res.data;
+      return res.data as NewsItem[];
     }
   });
 
@@ -36,54 +42,118 @@ const Home = () => {
       `/news?publishState=${PublishState.Published}&_expand=category&_sort=star&_order=desc&_limit=10`
     );
     if (res) {
-      return res.data;
+      return res.data as NewsItem[];
     }
   });
 
   const { username, region, role } = getUserToken();
 
-  useRequest(async () => {
+  const { data: newsList = [] } = useRequest(async () => {
     const res = await axios.get(`/news?publishState=2&_expand=category`);
     if (res) {
       const data = groupBy(res.data, (item) => item.category.value);
       renderBar(data);
+      return res.data as NewsInfo[];
     }
   });
 
   const renderBar = (
     data: Record<string, { value: string; label: string }[]>
   ) => {
-    var myChart = echarts.init(document.getElementById("main"));
+    if (barRef.current) {
+      var myChart = echarts.init(barRef.current);
 
-    // 指定图表的配置项和数据
-    var option = {
-      title: {
-        text: "新闻分类图示",
-      },
-      tooltip: {},
-      legend: {
-        data: ["新闻数量"],
-      },
-      xAxis: {
-        data: Object.keys(data),
-      },
-      yAxis: {
-        axisTick: {
-          length: 1,
+      // 指定图表的配置项和数据
+      var option = {
+        title: {
+          text: "新闻分类图示",
         },
-      },
-      series: [
-        {
-          name: "新闻数量",
-          type: "bar",
-          data: Object.values(data).map((item) => item.length),
+        tooltip: {},
+        legend: {
+          data: ["新闻数量"],
         },
-      ],
-    };
+        xAxis: {
+          data: Object.keys(data),
+          axisLabel: {
+            interval: 0,
+            rotate: 45,
+          },
+        },
+        yAxis: {
+          minInterval: 1,
+        },
+        series: [
+          {
+            name: "新闻数量",
+            type: "bar",
+            data: Object.values(data).map((item) => item.length),
+          },
+        ],
+      };
 
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
+      // 使用刚指定的配置项和数据显示图表。
+      myChart.setOption(option);
+
+      window.onresize = () => {
+        myChart.resize();
+      };
+    }
   };
+
+  const renderPie = () => {
+    if (pieRef.current) {
+      if (!pieChart.current) {
+        pieChart.current = echarts.init(pieRef.current);
+      }
+      var option;
+      const myNews = groupBy(
+        newsList.filter((item) => item.author === username),
+        (item) => item.category.value
+      );
+      const pieData = Object.keys(myNews).map((key) => ({
+        name: key,
+        value: myNews[key].length,
+      }));
+
+      option = {
+        title: {
+          text: "当前用户新闻分类图示",
+          // subtext: "Fake Data",
+          left: "center",
+        },
+        tooltip: {
+          trigger: "item",
+        },
+        legend: {
+          orient: "vertical",
+          left: "left",
+        },
+        series: [
+          {
+            name: "发布数量",
+            type: "pie",
+            radius: "50%",
+            data: pieData,
+            emphasis: {
+              itemStyle: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: "rgba(0, 0, 0, 0.5)",
+              },
+            },
+          },
+        ],
+      };
+
+      option && pieChart.current.setOption(option);
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      window.onresize = null;
+    };
+  }, []);
 
   return (
     <div>
@@ -99,7 +169,7 @@ const Home = () => {
             variant="outlined"
           >
             <List
-              dataSource={viewList as NewsItem[]}
+              dataSource={viewList}
               renderItem={(item) => (
                 <List.Item>
                   <Link to={`/news-manage/preview/${item.id}`}>
@@ -121,7 +191,7 @@ const Home = () => {
             variant="outlined"
           >
             <List
-              dataSource={starList as NewsItem[]}
+              dataSource={starList}
               renderItem={(item) => (
                 <List.Item>
                   <Link to={`/news-manage/preview/${item.id}`}>
@@ -141,7 +211,13 @@ const Home = () => {
               />
             }
             actions={[
-              <SettingOutlined key="setting" />,
+              <SettingOutlined
+                key="setting"
+                onClick={() => {
+                  setVisible(true);
+                  // renderPie();
+                }}
+              />,
               <EditOutlined key="edit" />,
               <EllipsisOutlined key="ellipsis" />,
             ]}
@@ -161,7 +237,23 @@ const Home = () => {
           </Card>
         </Col>
       </Row>
-      <div id="main" style={{ height: 400 }}></div>
+      <div ref={barRef} style={{ height: 400, marginTop: 30 }}></div>
+      <Drawer
+        title="个人新闻分类"
+        open={visible}
+        onClose={() => {
+          setVisible(false);
+        }}
+        closable
+        afterOpenChange={(open) => {
+          if (open) {
+            renderPie();
+          }
+        }}
+        width={500}
+      >
+        <div ref={pieRef} style={{ height: 400 }}></div>
+      </Drawer>
     </div>
   );
 };

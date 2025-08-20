@@ -17,6 +17,8 @@ import NewsAudit from "@/pages/audit-manage/NewsAudit";
 import NewsCategory from "@/pages/news-manage/NewsCategory";
 import Publishing from "@/pages/publish-manage/Publishing";
 import Sunset from "@/pages/publish-manage/Sunset";
+import News from "@/pages/news/News";
+import Detail from "@/pages/news/Detail";
 
 const App = () => {
   const routes = useRoutes([
@@ -131,6 +133,24 @@ const App = () => {
     {
       path: "/login",
       element: <Login />,
+    },
+    {
+      path: "/news",
+      element: <Outlet />,
+      children: [
+        {
+          index: true,
+          element: <Navigate to={"list"} />,
+        },
+        {
+          path: "list",
+          element: <News />,
+        },
+        {
+          path: "detail/:id",
+          element: <Detail />,
+        },
+      ],
     },
     {
       path: "*",
