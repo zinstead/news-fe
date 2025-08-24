@@ -24,8 +24,21 @@ import { useLoadingStore, useSidebarStore } from "@/zustand/store";
 import Auth from "@/components/Auth";
 import nProgress from "nprogress";
 import "nprogress/nprogress.css";
+import { isEmpty } from "lodash";
 
 const { Header, Sider, Content } = Layout;
+
+const transformTree = (data: any[]): any[] => {
+  return data.map((item) => {
+    // 只保留 key, label, 和 children 属性
+    const { key, label, children } = item;
+    return {
+      key,
+      label,
+      children: isEmpty(children) ? null : transformTree(children), // 递归处理子节点
+    };
+  });
+};
 
 const NewsSandbox = () => {
   nProgress.start();
@@ -67,6 +80,7 @@ const NewsSandbox = () => {
       return res.data;
     }
   );
+  const menuItems = transformTree(getPageMenuList(menuList, role?.rights));
 
   useEffect(() => {
     setRefreshMenuList(refreshMenuList);
@@ -85,7 +99,7 @@ const NewsSandbox = () => {
             <Menu
               theme="dark"
               mode="inline"
-              items={getPageMenuList(menuList, role?.rights)}
+              items={menuItems}
               selectedKeys={selectedKeys}
               defaultOpenKeys={openKeys}
               onClick={(info) => {
